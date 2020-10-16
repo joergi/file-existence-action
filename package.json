@@ -36,10 +36,12 @@
     "@actions/core": "^1.2.0"
   },
   "devDependencies": {
+    "@types/chai": "^4.2.13",
     "@types/jest": "^24.0.23",
     "@types/node": "^12.12.28",
     "@typescript-eslint/parser": "^2.8.0",
     "@zeit/ncc": "^0.20.5",
+    "chai": "^4.2.0",
     "eslint": "^5.16.0",
     "eslint-plugin-github": "^2.0.0",
     "eslint-plugin-jest": "^22.21.0",
