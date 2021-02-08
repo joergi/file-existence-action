@@ -1,9 +1,16 @@
 import * as core from '@actions/core'
 import fs from 'fs'
 
-async function checkExistence(path: string): Promise<boolean> {
+export async function checkExistence(
+  path: string,
+  ignoreCase: boolean
+): Promise<boolean> {
   try {
-    await fs.promises.access(path)
+    if (ignoreCase) {
+      await fs.promises.access(path.toLowerCase())
+    } else {
+      await fs.promises.access(path)
+    }
   } catch (error) {
     return false
   }
@@ -15,6 +22,8 @@ async function run(): Promise<void> {
     const files: string = core.getInput('files', {required: true})
     const failure: boolean =
       (core.getInput('allow_failure') || 'false').toUpperCase() === 'TRUE'
+    const ignoreCase: boolean =
+        (core.getInput('ignore_case') || 'false').toUpperCase() === 'TRUE'
     const fileList: string[] = files
       .split(',')
       .map((item: string) => item.trim())
@@ -23,7 +32,7 @@ async function run(): Promise<void> {
     // Check in parallel
     await Promise.all(
       fileList.map(async (file: string) => {
-        const isPresent = await checkExistence(file)
+        const isPresent = await checkExistence(file, ignoreCase)
         if (!isPresent) {
           missingFiles.push(file)
         }
